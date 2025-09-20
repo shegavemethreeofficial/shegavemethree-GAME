@@ -98,12 +98,19 @@ body{margin:0; color:var(--ink); font-family: system-ui, -apple-system, "Segoe U
 
 /* Game */
 .game-card{ padding-bottom:16px }
-.video-wrap{
-  width:100%; aspect-ratio:16/9; border-radius:18px;
-  background: #f3f4f8;
-  border:1px solid rgba(0,0,0,0.06);
-  overflow:hidden; display:grid; place-items:center;
+.video-wrap {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 18px;
+    background: #0a0a0a; /* darker base for dark mode */
+    border: 1px solid rgba(255, 20, 147, 0.2); /* subtle pink outline */
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    /* glow effect */
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.4), 0 0 40px rgba(255, 20, 147, 0.2);
 }
+
 .model-video{ width:100%; height:100%; object-fit:cover; display:block }
 .placeholder{ opacity:.8; font-weight:700; color:var(--ink-soft); text-align:center; padding:14px }
 
@@ -119,6 +126,13 @@ body{margin:0; color:var(--ink); font-family: system-ui, -apple-system, "Segoe U
 }
 .icon-btn:hover{ transform: translateY(-2px); box-shadow:0 12px 28px rgba(20,20,40,0.14) }
 .icon-btn img{ width:100%; height:100%; object-fit:contain; display:block }
+/* Icon labels under the buttons */
+.pose-label {
+    color: #ffd6ef; /* soft pink/white */
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,.7); /* crisp on dark bg */
+}
+
 
 /* Stickers — calmer look */
 .stickers-layer{ position:fixed; inset:0; z-index:5; pointer-events:none; overflow:hidden }
@@ -1054,12 +1068,30 @@ body,
 }
 
 .persistent-credit {
-  position: fixed;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 999;
+    display: inline-block;
+    margin-top: 16px;
+    padding: 6px 14px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.8); /* light glassy background */
+    border: 1px solid rgba(255, 105, 180, 0.6);
+    color: #111; /* deep black text */
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), inset 0 0 10px rgba(255, 20, 147, 0.2);
+    transition: all 0.3s ease;
 }
+
+    .persistent-credit:hover {
+        border-color: #ff4fc9;
+        background: rgba(255, 255, 255, 0.95);
+        color: #000;
+        box-shadow: 0 0 10px rgba(255, 20, 147, 0.5), inset 0 0 14px rgba(255, 20, 147, 0.3);
+    }
+
+
+
 
 /* On mobile: make sure it’s still legible */
 @media (max-width: 768px) {
@@ -2034,13 +2066,22 @@ body,
 
 /* Tiny label under icons */
 .pose-label {
-  font-size: 0.65rem;        /* small but legible */
-  font-weight: 700;
-  margin-top: 2px;           /* very little padding */
-  text-align: center;
-  line-height: 1.1;
-  color: #333;               /* dark text for contrast */
+    margin-top: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    /* improve readability */
+    color: #f8dfff; /* light pink text */
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.7), 0 0 2px rgba(255, 20, 147, 0.5);
+    /* optional: subtle glow */
+    transition: color 0.3s, text-shadow 0.3s;
 }
+
+.icon-btn:hover + .pose-label {
+    color: #ff4fc9; /* brighter pink highlight */
+    text-shadow: 0 0 10px rgba(255, 20, 147, 0.8), 0 0 4px rgba(0, 0, 0, 0.8);
+}
+
 
 /* Optional: make sure buttons keep their existing size */
 .pose-item .icon-btn {
@@ -2054,35 +2095,59 @@ body,
   }
 }
 /* Tiny hint under toolbar */
-.toolbar-instruction {
-  font-size: 0.48rem;      /* very small */
-  font-weight: 600;        /* bold enough to read */
-  line-height: 1.1;
-  color: #666;             /* softer gray */
-  text-align: center;
-  margin-top: 14px;         /* tight spacing */
-  opacity: 0.6;           /* subtle, not shouting */
+
+
+/* make sure the container doesn’t stretch it full width */
+/* Final toolbar instruction style */
+.game-card .toolbar-instruction {
+    display: block;
+    margin: 16px auto 0;
+    text-align: center;
+    font-size: 1.6rem; /* Adjust size here */
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    /* Neon pink */
+    color: #ff4fa9;
+    text-shadow: 0 0 6px #ff4fa9, 0 0 12px #ff4fa9, 0 0 20px #cc0077, 0 0 30px #990055;
+    /* Flicker animation */
+    animation: neonFlicker 3s infinite alternate;
 }
+
+/* Neon flicker effect */
+@keyframes neonFlicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        opacity: 1;
+    }
+
+    20%, 24%, 55% {
+        opacity: 0.75;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Instruction line pinned to bottom of game soft-card */
 .game-card {
   position: relative;   /* gives an anchor for absolute children */
 }
 
-.toolbar-instruction {
-  position: absolute;
-  bottom: 6px;          /* distance from card bottom */
-  left: 0;
-  width: 100%;
-  text-align: center;
 
-  font-size: 0.65rem;
-  font-weight: 600;
-  line-height: 1.1;
-  color: #666;
-  opacity: 0.85;
-  margin: 0;            /* remove top margin */
-}
 
 
 /* Small note pinned to bottom of paywall card */
@@ -2117,3 +2182,308 @@ body,
   margin-top: 6px;       /* tiny space below button */
   bottom: -14px;
 }
+/* === Dark Mode Neon Theme === */
+
+/* Global dark background + light text */
+body {
+    background-color: #0d0d0f; /* deep near-black */
+    color: #f2f2f5; /* soft off-white */
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+}
+
+/* Panels / cards */
+.splash,
+.paywall,
+.game,
+.toolbar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    padding: 18px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(40,0,40,0.7) 100%);
+    border-radius: 18px;
+    box-shadow: inset 0 0 25px rgba(255, 20, 147, 0.25), 0 6px 18px rgba(0,0,0,0.5);
+}
+
+.pose-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+    .pose-item:hover {
+        transform: translateY(-4px) scale(1.05);
+    }
+
+
+/* Neon buttons */
+.btn {
+    background: linear-gradient(135deg, #ff33aa, #ff66cc);
+    border: 2px solid #ff33aa;
+    color: #fff;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+    .btn:hover {
+        background: linear-gradient(135deg, #ff66cc, #ff33aa);
+        box-shadow: 0 0 6px #ff66cc, 0 0 12px #ff33aa, 0 0 18px #ff33aa;
+        transform: translateY(-1px) scale(1.03);
+    }
+
+    .btn:focus-visible,
+    .btn:active {
+        outline: none;
+        box-shadow: 0 0 8px #ff33aa, 0 0 16px #ff33aa, 0 0 24px #ff33aa, 0 0 32px #ff33aa;
+        transform: translateY(-2px) scale(1.05);
+    }
+
+/* Toolbar neon vibe */
+.icon-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .icon-btn img {
+        width: 56px;
+        height: 56px;
+        display: block;
+    }
+
+    /* Hover glow */
+    .icon-btn:hover {
+        border-color: #ff66cc;
+        box-shadow: 0 0 6px #ff66cc, 0 0 12px #ff33aa;
+        transform: translateY(-1px) scale(1.03);
+    }
+
+    /* Active neon glow */
+    .icon-btn.active,
+    .icon-btn[aria-pressed="true"] {
+        border-color: #ff33aa;
+        box-shadow: 0 0 8px #ff33aa, 0 0 16px #ff33aa, 0 0 24px #ff33aa;
+        transform: translateY(-2px) scale(1.05);
+    }
+
+/* Video container framing */
+.video-wrap {
+    background: #000;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(255, 51, 170, 0.3);
+}
+/* === Global dark gradient === */
+body {
+    background: radial-gradient(1200px 800px at 75% -10%, rgba(255, 102, 204, 0.18), rgba(0,0,0,0) 60%), radial-gradient(900px 600px at -10% 110%, rgba(255, 51, 170, 0.12), rgba(0,0,0,0) 55%), linear-gradient(#0b0b0f, #07070b); /* darker base */
+    color: #f3f3f6;
+}
+
+/* Panels (splash, paywall, game wrapper, toolbar) */
+.splash,
+.paywall,
+.game,
+.toolbar {
+    background: linear-gradient(180deg, rgba(16, 14, 20, 0.92), rgba(9, 9, 14, 0.92));
+    border: 1px solid rgba(255, 80, 170, 0.18);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+/* Video frame – darker with subtle pink rim */
+.video-wrap {
+    background: #000;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 80, 170, 0.25);
+    box-shadow: 0 0 0 1px rgba(255, 80, 170, 0.15), 0 12px 40px rgba(255, 51, 170, 0.25);
+}
+/* Dark mode background gradient */
+.app-root {
+    background: linear-gradient(135deg, #0a0a0a, #111111 30%, #ff2a92 100%);
+    color: #f2f2f2; /* light text for contrast */
+}
+
+/* Game card (video area) */
+.game-card {
+    background: linear-gradient(145deg, #0d0d0d, #1a1a1a 60%, #ff1493 100%);
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.25);
+}
+
+/* Toolbar background (button grid) */
+.toolbar {
+    background: linear-gradient(135deg, #000000, #1a1a1a 70%, #ff2a92 100%);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 0 15px rgba(255, 20, 147, 0.3);
+}
+
+/* Card containers in general */
+.soft-card {
+    background: linear-gradient(135deg, #0b0b0b, #161616 60%, #ff1e82 100%);
+    border-radius: 16px;
+    color: #fff;
+}
+
+/* Button hover highlight stays neon but pops more */
+.icon-btn:hover {
+    box-shadow: 0 0 18px 4px rgba(255, 20, 147, 0.8);
+    transform: scale(1.1);
+    border-radius: 10px;
+}
+/* ---------- Bubbles ---------- */
+.bubble-layer {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* Bubble style - lighter, translucent, playful */
+.bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 192, 203, 0.25) 40%, rgba(255, 105, 180, 0.1) 70%, rgba(0, 0, 0, 0));
+    box-shadow: 0 0 12px rgba(255, 105, 180, 0.5), inset 0 0 6px rgba(255, 255, 255, 0.6);
+    opacity: 0.7;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translateY(-200vh) scale(1.1);
+        opacity: 0;
+    }
+}
+
+
+
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-110vh) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* ---------- Stickers ---------- */
+.stickers-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.sticker {
+    position: absolute;
+    filter: drop-shadow(0 0 8px rgba(255, 20, 147, 0.8)) drop-shadow(0 0 16px rgba(255, 20, 147, 0.5));
+    transition: transform 0.2s ease-out;
+}
+
+    .sticker.landed {
+        opacity: 0.85;
+        transform: scale(1.05);
+    }
+/* === Footer: fixed to viewport bottom without adding page height === */
+.footer-container {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+    display: flex; /* stack vertically */
+    flex-direction: column; /* logo on top, pill under */
+    align-items: center;
+    gap: 10px; /* space between logo and pill */
+    z-index: 2000;
+}
+
+/* Restore comfortable sizes */
+.footer-watermark img {
+    height: 75px; /* bump up from tiny */
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.25));
+}
+
+.footer-credit {
+    margin: 0;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.85);
+    color: #000; /* <-- text color */
+    backdrop-filter: blur(6px) saturate(1.05);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 4px 14px rgba(20,20,40,0.10);
+    font-size: 13px;
+    line-height: 1;
+}
+
+
+    .footer-credit p {
+        margin: 0;
+    }
+
+/* On PAYWALL, let footer flow so it won't cover QR/buttons */
+.paywall-stage .footer-container {
+    position: static;
+    transform: none;
+    bottom: auto;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+/* Very short screens: tuck a bit closer to the edge */
+@media (max-height: 700px) {
+    .footer-container {
+        bottom: 8px;
+    }
+}
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
